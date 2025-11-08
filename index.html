@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hyperlocal Durham: Queer History</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="game-container">
+        <img id="title-graphic" src="assets/pride+pres title.png" alt="Pride + Preservation">
+        <div id="game-wrapper">
+            <canvas id="gameCanvas"></canvas>
+        </div>
+
+        <!-- Dialogue popup -->
+        <div id="dialogue-box" class="hidden">
+            <div class="dialogue-content">
+                <button id="close-dialogue" class="close-btn">&times;</button>
+                <h2 id="dialogue-title"></h2>
+                <p id="dialogue-text"></p>
+                <a id="dialogue-link" href="#" target="_blank" class="learn-more">Learn more at OpenDurham.org &rarr;</a>
+            </div>
+        </div>
+
+        <!-- Controls info -->
+        <div id="controls">
+            <p>Use Arrow Keys or WASD to move | Press SPACE to learn more</p>
+        </div>
+    </div>
+
+    <script src="locationData.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
