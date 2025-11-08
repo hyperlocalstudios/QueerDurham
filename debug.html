@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Sprite Loading</title>
+</head>
+<body>
+    <h1>Sprite Loading Debug</h1>
+    <div id="info"></div>
+    <div id="images"></div>
+
+    <script>
+        const info = document.getElementById('info');
+        const images = document.getElementById('images');
+
+        // Show current path info
+        info.innerHTML = `
+            <p><strong>Current Location:</strong> ${window.location.href}</p>
+            <p><strong>Pathname:</strong> ${window.location.pathname}</p>
+            <p><strong>Includes /QueerDurham/:</strong> ${window.location.pathname.includes('/QueerDurham/')}</p>
+        `;
+
+        // Test different base paths
+        const basePath = window.location.pathname.includes('/QueerDurham/')
+            ? '/QueerDurham/'
+            : './';
+
+        info.innerHTML += `<p><strong>Base Path:</strong> ${basePath}</p>`;
+
+        // Try loading a sprite
+        const testPaths = [
+            `${basePath}assets/Sprite/sprite-up_1.png`,
+            './assets/Sprite/sprite-up_1.png',
+            '/QueerDurham/assets/Sprite/sprite-up_1.png',
+            'assets/Sprite/sprite-up_1.png'
+        ];
+
+        testPaths.forEach(path => {
+            const img = new Image();
+            const container = document.createElement('div');
+            container.innerHTML = `<p>Testing: <code>${path}</code> - <span id="${btoa(path)}">Loading...</span></p>`;
+            images.appendChild(container);
+
+            img.onload = () => {
+                document.getElementById(btoa(path)).innerHTML = '✅ SUCCESS';
+                document.getElementById(btoa(path)).style.color = 'green';
+                const imgDisplay = document.createElement('img');
+                imgDisplay.src = path;
+                imgDisplay.style.width = '50px';
+                container.appendChild(imgDisplay);
+            };
+
+            img.onerror = () => {
+                document.getElementById(btoa(path)).innerHTML = '❌ FAILED (404)';
+                document.getElementById(btoa(path)).style.color = 'red';
+            };
+
+            img.src = path;
+        });
+    </script>
+</body>
+</html>
