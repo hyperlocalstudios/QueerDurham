@@ -59,6 +59,10 @@ class Game {
     }
 
     loadLocationPins() {
+        const basePath = window.location.pathname.includes('/QueerDurham/')
+            ? '/QueerDurham/'
+            : './';
+
         const pinImages = ['locationpin-1.png', 'locationpin-2.png', 'locationpin-3.png'];
         let loadedCount = 0;
 
@@ -71,7 +75,10 @@ class Game {
                     this.locationPinsLoaded = true;
                 }
             };
-            pinImg.src = `assets/${pinFile}`;
+            pinImg.onerror = () => {
+                console.error(`Failed to load pin: ${basePath}assets/${pinFile}`);
+            };
+            pinImg.src = `${basePath}assets/${pinFile}`;
         });
     }
 
@@ -80,6 +87,10 @@ class Game {
         const frames = [1, 2, 3, 4];
         let totalSprites = directions.length * frames.length;
         let loadedCount = 0;
+
+        const basePath = window.location.pathname.includes('/QueerDurham/')
+            ? '/QueerDurham/'
+            : './';
 
         directions.forEach(direction => {
             this.spriteImages[direction] = {};
@@ -91,13 +102,20 @@ class Game {
                         this.spritesLoaded = true;
                     }
                 };
-                img.src = `assets/sprite/sprite-${direction}_${frame}.png`;
+                img.onerror = () => {
+                    console.error(`Failed to load sprite: ${basePath}assets/sprite/sprite-${direction}_${frame}.png`);
+                };
+                img.src = `${basePath}assets/sprite/sprite-${direction}_${frame}.png`;
                 this.spriteImages[direction][frame] = img;
             });
         });
     }
 
     loadBackgroundMap() {
+        const basePath = window.location.pathname.includes('/QueerDurham/')
+            ? '/QueerDurham/'
+            : './';
+
         const bgImage = new Image();
         bgImage.onload = () => {
             this.backgroundMap = bgImage;
@@ -119,7 +137,10 @@ class Game {
                 this.updateLocationPosition(location);
             });
         };
-        bgImage.src = 'assets/BackgroundMap.png';
+        bgImage.onerror = () => {
+            console.error(`Failed to load background map: ${basePath}assets/BackgroundMap.png`);
+        };
+        bgImage.src = `${basePath}assets/BackgroundMap.png`;
     }
 
     setupInputHandlers() {
@@ -155,6 +176,10 @@ class Game {
     }
 
     loadLocations() {
+        const basePath = window.location.pathname.includes('/QueerDurham/')
+            ? '/QueerDurham/'
+            : './';
+
         // Load all location images
         LOCATIONS.forEach(location => {
             const locationData = {
@@ -174,7 +199,10 @@ class Game {
 
                 this.checkLocationLoaded(locationData);
             };
-            normalImg.src = location.image;
+            normalImg.onerror = () => {
+                console.error(`Failed to load location image: ${basePath}${location.image}`);
+            };
+            normalImg.src = `${basePath}${location.image}`;
 
             // Load hover image (with title)
             const hoverImg = new Image();
@@ -182,7 +210,10 @@ class Game {
                 locationData.hoverImage = hoverImg;
                 this.checkLocationLoaded(locationData);
             };
-            hoverImg.src = location.imageHover;
+            hoverImg.onerror = () => {
+                console.error(`Failed to load hover image: ${basePath}${location.imageHover}`);
+            };
+            hoverImg.src = `${basePath}${location.imageHover}`;
 
             this.locations.push(locationData);
         });
