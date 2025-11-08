@@ -274,7 +274,7 @@ class Game {
     }
 
     handleSpaceInteraction() {
-        // Check if near a location and open dialogue
+        // Check if near a location
         if (this.nearbyLocation) {
             this.showDialogue(this.nearbyLocation);
         }

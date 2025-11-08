@@ -200,6 +200,17 @@ const LOCATIONS = [
         pinOffset: 15, // Standard offset (35%)
         description: 'Historic church that served as an important gathering space for the LGBTQ+ community.',
         link: 'https://www.opendurham.org/tours/queer-history-durham'
+    },
+    {
+        id: 'harriet-tubman-house',
+        name: 'Harriet Tubman House',
+        image: 'assets/SitesNoTitle/Harriet Tubman House.png',
+        imageHover: 'assets/SitesTitle/Harriet Tubman House_title.png',
+        x: '36.5%',
+        y: '76.6%',
+        pinOffset: 15, // Standard offset
+        description: 'Historic location with significance to Durham\'s LGBTQ+ community.',
+        link: 'https://www.opendurham.org/tours/queer-history-durham'
     }
 ];
 
