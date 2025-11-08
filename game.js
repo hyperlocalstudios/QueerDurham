@@ -103,9 +103,9 @@ class Game {
                     }
                 };
                 img.onerror = () => {
-                    console.error(`Failed to load sprite: ${basePath}assets/sprite/sprite-${direction}_${frame}.png`);
+                    console.error(`Failed to load sprite: ${basePath}assets/Sprite/sprite-${direction}_${frame}.png`);
                 };
-                img.src = `${basePath}assets/sprite/sprite-${direction}_${frame}.png`;
+                img.src = `${basePath}assets/Sprite/sprite-${direction}_${frame}.png`;
                 this.spriteImages[direction][frame] = img;
             });
         });
