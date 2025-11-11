@@ -139,12 +139,13 @@ body {
 /* Controls */
 #controls {
     text-align: center;
-    margin-top: 20px;
+    margin-top: 10px;
+    margin-bottom: 5px;
     color: #fff;
     font-size: 0.9rem;
     padding: 10px;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 5px;
+    background: #000000;
+    border-radius: 0;
 }
 
 /* Mobile Responsive */
