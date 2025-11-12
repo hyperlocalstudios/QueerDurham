@@ -14,21 +14,25 @@ body {
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     padding: 20px;
+    overflow-y: auto;
 }
 
 #game-container {
-    max-width: 1200px;
+    max-width: 1400px;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 #title-graphic {
     width: 100%;
+    max-width: 1024px;
     height: auto;
     z-index: 10;
     margin-bottom: -20px;
@@ -38,14 +42,15 @@ body {
 #game-wrapper {
     background: transparent;
     margin: 0 auto;
-    max-width: 1024px;
     width: 100%;
+    max-width: 1024px;
     position: relative;
     display: inline-block;
 }
 
 #gameCanvas {
     display: block;
+    width: 100%;
     max-width: 100%;
     height: auto;
 }
@@ -278,6 +283,7 @@ body {
 /* Main Page Button */
 #main-page-button-container {
     margin-top: 20px;
+    margin-bottom: 10px;
     width: 100%;
     max-width: 1024px;
     text-align: center;
@@ -304,6 +310,7 @@ body {
 /* Footer Credits */
 #credits {
     margin-top: 15px;
+    margin-bottom: 20px;
     width: 100%;
     max-width: 1024px;
     text-align: center;
@@ -324,6 +331,45 @@ body {
 
 #credits a:hover {
     text-decoration: underline;
+}
+
+/* Desktop: Scale game to fit with dialogue visible */
+@media (min-width: 769px) {
+    /* Calculate game width to ensure everything fits in viewport */
+    #game-wrapper,
+    #character-dialogue,
+    #main-page-button-container,
+    #credits {
+        max-width: min(1024px, calc(100vw - 40px));
+    }
+
+    #title-graphic {
+        max-width: min(1024px, calc(100vw - 40px));
+    }
+
+    #gameCanvas {
+        width: 100%;
+        height: auto;
+    }
+}
+
+/* Large Desktop: More breathing room */
+@media (min-width: 1400px) {
+    body {
+        padding: 40px;
+    }
+
+    #game-container {
+        max-width: 1200px;
+    }
+
+    #game-wrapper,
+    #character-dialogue,
+    #main-page-button-container,
+    #credits,
+    #title-graphic {
+        max-width: 1024px;
+    }
 }
 
 /* Mobile Responsive */
