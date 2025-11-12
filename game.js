@@ -40,6 +40,14 @@ class Game {
         this.hoveredLocation = null;
         this.nearbyLocation = null;
 
+        // Object system
+        this.objects = [];
+        this.nearbyObject = null;
+        this.isAcquiringObject = false;
+        this.acquisitionState = null;
+        this.acquireSprite = null;
+        this.acquireSpriteLoaded = false;
+
         // Pin indicator
         this.pinBounce = 0;
 
@@ -53,8 +61,20 @@ class Game {
         this.locationPinsLoaded = false;
         this.loadLocationPins();
 
+        // Bust sprite for character dialogue
+        this.bustSprite = null;
+        this.bustSpriteLoaded = false;
+        this.loadBustSprite();
+
+        // Initialize dialogue box with bust sprite once loaded
+        this.initializeDialogueBox();
+
+        // Load acquire sprite
+        this.loadAcquireSprite();
+
         // Initialize
         this.loadLocations();
+        this.loadObjects();
         this.gameLoop();
     }
 
@@ -80,6 +100,65 @@ class Game {
             };
             pinImg.src = `${basePath}assets/${pinFile}`;
         });
+    }
+
+    loadBustSprite() {
+        const basePath = window.location.pathname.includes('/QueerDurham/')
+            ? '/QueerDurham/'
+            : './';
+
+        const bustImg = new Image();
+        bustImg.onload = () => {
+            this.bustSprite = bustImg;
+            this.bustSpriteLoaded = true;
+            console.log('Bust sprite loaded successfully');
+            // Update the dialogue box with the loaded sprite
+            this.updateBustSprite();
+        };
+        bustImg.onerror = () => {
+            console.error(`Failed to load bust sprite: ${basePath}assets/bustsprite/bust-sprite_bull-neutral.png`);
+        };
+        bustImg.src = `${basePath}assets/bustsprite/bust-sprite_bull-neutral.png`;
+        console.log('Loading bust sprite from:', bustImg.src);
+    }
+
+    initializeDialogueBox() {
+        // Set up the permanent dialogue box once DOM is ready
+        const charDialogue = document.getElementById('character-dialogue');
+        if (charDialogue && this.bustSpriteLoaded && this.bustSprite) {
+            this.updateBustSprite();
+        }
+    }
+
+    updateBustSprite() {
+        const bustElement = document.querySelector('.character-bust');
+        if (bustElement && this.bustSpriteLoaded && this.bustSprite) {
+            const bustWidth = 120;
+            const aspectRatio = this.bustSprite.height / this.bustSprite.width;
+            const bustHeight = bustWidth * aspectRatio;
+
+            bustElement.style.backgroundImage = `url('${this.bustSprite.src}')`;
+            bustElement.style.width = `${bustWidth}px`;
+            bustElement.style.height = `${bustHeight}px`;
+            console.log('Updated bust sprite in dialogue box');
+        }
+    }
+
+    loadAcquireSprite() {
+        const basePath = window.location.pathname.includes('/QueerDurham/')
+            ? '/QueerDurham/'
+            : './';
+
+        const acquireImg = new Image();
+        acquireImg.onload = () => {
+            this.acquireSprite = acquireImg;
+            this.acquireSpriteLoaded = true;
+            console.log('Acquire sprite loaded successfully');
+        };
+        acquireImg.onerror = () => {
+            console.error(`Failed to load acquire sprite: ${basePath}assets/Sprite/sprite-acquire.png`);
+        };
+        acquireImg.src = `${basePath}assets/Sprite/sprite-acquire.png`;
     }
 
     loadSprites() {
@@ -135,6 +214,11 @@ class Game {
             // Update all location positions that use percentages
             this.locations.forEach(location => {
                 this.updateLocationPosition(location);
+            });
+
+            // Update all object positions that use percentages
+            this.objects.forEach(object => {
+                this.updateObjectPosition(object);
             });
         };
         bgImage.onerror = () => {
@@ -219,6 +303,75 @@ class Game {
         });
     }
 
+    loadObjects() {
+        if (typeof OBJECTS === 'undefined') {
+            console.log('No objects defined');
+            return;
+        }
+
+        const basePath = window.location.pathname.includes('/QueerDurham/')
+            ? '/QueerDurham/'
+            : './';
+
+        OBJECTS.forEach(object => {
+            const objectData = {
+                ...object,
+                image1Loaded: null,
+                image2Loaded: null,
+                loaded: false,
+                animationFrame: 1, // Toggle between 1 and 2
+                animationCounter: 0
+            };
+
+            // Load first image state
+            const img1 = new Image();
+            img1.onload = () => {
+                objectData.image1Loaded = img1;
+                objectData.width = img1.width * GAME_CONFIG.objectScale;
+                objectData.height = img1.height * GAME_CONFIG.objectScale;
+                this.checkObjectLoaded(objectData);
+            };
+            img1.onerror = () => {
+                console.error(`Failed to load object image: ${basePath}${object.image1}`);
+            };
+            img1.src = `${basePath}${object.image1}`;
+
+            // Load second image state
+            const img2 = new Image();
+            img2.onload = () => {
+                objectData.image2Loaded = img2;
+                this.checkObjectLoaded(objectData);
+            };
+            img2.onerror = () => {
+                console.error(`Failed to load object image: ${basePath}${object.image2}`);
+            };
+            img2.src = `${basePath}${object.image2}`;
+
+            this.objects.push(objectData);
+        });
+    }
+
+    checkObjectLoaded(objectData) {
+        if (objectData.image1Loaded && objectData.image2Loaded) {
+            objectData.loaded = true;
+            // Update position if percentage-based
+            this.updateObjectPosition(objectData);
+        }
+    }
+
+    updateObjectPosition(objectData) {
+        if (this.backgroundMapLoaded && objectData.width && objectData.height) {
+            if (typeof objectData.x === 'string' && objectData.x.includes('%')) {
+                const percent = parseFloat(objectData.x);
+                objectData.x = (percent / 100) * this.backgroundMapWidth - (objectData.width / 2);
+            }
+            if (typeof objectData.y === 'string' && objectData.y.includes('%')) {
+                const percent = parseFloat(objectData.y);
+                objectData.y = (percent / 100) * this.backgroundMapHeight - (objectData.height / 2);
+            }
+        }
+    }
+
     updateLocationPosition(locationData) {
         // Convert percentage strings to pixel values based on background map size
         if (this.backgroundMapLoaded && locationData.width && locationData.height) {
@@ -274,20 +427,256 @@ class Game {
     }
 
     handleSpaceInteraction() {
-        // Check if near a location
-        if (this.nearbyLocation) {
-            this.showDialogue(this.nearbyLocation);
+        // If acquisition animation is in wait phase (step 3), skip to end
+        if (this.isAcquiringObject && this.acquisitionState && this.acquisitionState.animationStep === 3) {
+            this.acquisitionState.animationStep = 4;
+            return;
+        }
+
+        // Check if a button is visible and can be triggered
+        const charDialogue = document.getElementById('character-dialogue');
+        const learnMoreBtn = charDialogue ? charDialogue.querySelector('.learn-more-btn') : null;
+
+        // If button is visible, trigger it with space bar
+        if (learnMoreBtn && learnMoreBtn.style.display === 'block') {
+            learnMoreBtn.click();
+            return;
+        }
+
+        // Otherwise, check if near an object first (objects have priority)
+        if (this.nearbyObject && !this.nearbyObject.collected) {
+            this.showObjectDialogue(this.nearbyObject);
+        }
+        // Otherwise check if near a location
+        else if (this.nearbyLocation) {
+            // Show the character dialogue first
+            this.showCharacterDialogue(this.nearbyLocation);
         }
     }
 
+    showObjectDialogue(object) {
+        console.log('showObjectDialogue called for:', object.name);
+
+        const charDialogue = document.getElementById('character-dialogue');
+        if (!charDialogue) return;
+
+        const textElement = charDialogue.querySelector('.character-text');
+        const learnMoreBtn = charDialogue.querySelector('.learn-more-btn');
+
+        // Update text with object dialogue
+        textElement.textContent = object.dialogue;
+
+        // Update button text
+        learnMoreBtn.textContent = object.buttonText;
+
+        // Show the button
+        learnMoreBtn.style.display = 'block';
+
+        // Add event listener to collect the object
+        learnMoreBtn.onclick = () => {
+            this.acquireObject(object);
+        };
+
+        console.log('Object dialogue shown');
+    }
+
+    showCharacterDialogue(location) {
+        console.log('showCharacterDialogue called for:', location.name);
+
+        const charDialogue = document.getElementById('character-dialogue');
+        if (!charDialogue) return;
+
+        const textElement = charDialogue.querySelector('.character-text');
+        const learnMoreBtn = charDialogue.querySelector('.learn-more-btn');
+
+        // Update text with location dialogue
+        textElement.textContent = location.dialogue || "Hmm, this place looks interesting...";
+
+        // Update button text to "Investigate..."
+        learnMoreBtn.textContent = "Investigate...";
+
+        // Show the "Learn More" button
+        learnMoreBtn.style.display = 'block';
+
+        // Add event listener to "Learn More" button
+        learnMoreBtn.onclick = () => {
+            this.showDialogue(location);
+        };
+
+        console.log('Character dialogue updated for location');
+    }
+
+    acquireObject(object) {
+        console.log('Acquiring object:', object.name);
+
+        // Mark object as collected
+        object.collected = true;
+        this.isAcquiringObject = true;
+
+        // Store acquisition animation state
+        this.acquisitionState = {
+            object: object,
+            animationStep: 0, // 0=spin, 1=pose, 2=float, 3=wait, 4=done
+            spinDirection: 0, // 0=down, 1=right, 2=up, 3=left
+            spinCounter: 0,
+            poseCounter: 0,
+            floatCounter: 0,
+            floatY: 0,
+            linesOpacity: 0,
+            waitCounter: 0
+        };
+
+        console.log('Starting acquisition animation');
+    }
+
+    updateAcquisitionAnimation() {
+        const state = this.acquisitionState;
+        const directions = ['down', 'right', 'up', 'left'];
+
+        // Step 0: Spin through all directions
+        if (state.animationStep === 0) {
+            state.spinCounter++;
+            if (state.spinCounter >= 8) { // 8 frames per direction
+                state.spinCounter = 0;
+                state.spinDirection++;
+
+                if (state.spinDirection >= 4) {
+                    // Done spinning, move to pose
+                    state.animationStep = 1;
+                    state.spinDirection = 0;
+                }
+            }
+            // Update player direction during spin
+            this.player.direction = directions[state.spinDirection];
+        }
+        // Step 1: Show acquire pose
+        else if (state.animationStep === 1) {
+            state.poseCounter++;
+            if (state.poseCounter >= 10) { // Hold pose for 10 frames
+                state.animationStep = 2;
+
+                // Update dialogue to show acquire message
+                const charDialogue = document.getElementById('character-dialogue');
+                if (charDialogue) {
+                    const textElement = charDialogue.querySelector('.character-text');
+                    const learnMoreBtn = charDialogue.querySelector('.learn-more-btn');
+                    textElement.textContent = state.object.acquireMessage;
+                    learnMoreBtn.style.display = 'none';
+                }
+            }
+        }
+        // Step 2: Float object up with emanating lines
+        else if (state.animationStep === 2) {
+            state.floatCounter++;
+            state.floatY = Math.min(25, state.floatY + (25 / 30)); // Float up 25 pixels over 30 frames
+            state.linesOpacity = Math.min(1, state.linesOpacity + (1 / 30));
+
+            if (state.floatCounter >= 30) { // Float for 30 frames
+                state.animationStep = 3;
+            }
+        }
+        // Step 3: Wait with message visible (300 frames / 5 seconds)
+        else if (state.animationStep === 3) {
+            state.waitCounter++;
+            if (state.waitCounter >= 300) { // 5 seconds at 60fps
+                state.animationStep = 4;
+            }
+        }
+        // Step 4: Done
+        else if (state.animationStep === 4) {
+            this.isAcquiringObject = false;
+            this.acquisitionState = null;
+            this.resetDialogue();
+        }
+    }
+
+
+    resetDialogue() {
+        const charDialogue = document.getElementById('character-dialogue');
+        if (!charDialogue) return;
+
+        const textElement = charDialogue.querySelector('.character-text');
+        const learnMoreBtn = charDialogue.querySelector('.learn-more-btn');
+
+        // Reset to default instructions
+        textElement.textContent = 'I can use Arrow Keys or WASD to move and press SPACE to interact with objects.';
+
+        // Hide the "Learn More" button
+        learnMoreBtn.style.display = 'none';
+    }
+
     showDialogue(location) {
+        const basePath = window.location.pathname.includes('/QueerDurham/')
+            ? '/QueerDurham/'
+            : './';
+
         const dialogueBox = document.getElementById('dialogue-box');
         const dialogueTitle = document.getElementById('dialogue-title');
-        const dialogueText = document.getElementById('dialogue-text');
+        const dialogueImage = document.getElementById('dialogue-image');
+        const dialogueAddress = document.getElementById('dialogue-address');
+        const dialogueCharacteristics = document.getElementById('dialogue-characteristics');
+        const dialoguePreviewText = document.getElementById('dialogue-preview-text');
         const dialogueLink = document.getElementById('dialogue-link');
 
+        // Section 1: Title, image, and address
         dialogueTitle.textContent = location.name;
-        dialogueText.textContent = location.description;
+        dialogueImage.src = `${basePath}${location.imageHover}`;
+        dialogueImage.alt = location.name;
+        dialogueAddress.textContent = location.address || '';
+
+        // Section 2: Characteristics icons
+        dialogueCharacteristics.innerHTML = ''; // Clear previous icons
+        if (location.characteristics && location.characteristics.length > 0) {
+            location.characteristics.forEach(characteristic => {
+                const icon = document.createElement('img');
+                icon.src = `${basePath}assets/legend/icon_${characteristic}.png`;
+                icon.alt = characteristic;
+                icon.title = characteristic.charAt(0).toUpperCase() + characteristic.slice(1);
+                dialogueCharacteristics.appendChild(icon);
+            });
+            dialogueCharacteristics.style.display = 'flex';
+        } else {
+            dialogueCharacteristics.style.display = 'none';
+        }
+
+        // Section 3: Preview text and link
+        const fullText = location.previewText || location.description;
+        const words = fullText.split(' ');
+
+        // Clear previous content
+        dialoguePreviewText.innerHTML = '';
+
+        if (words.length > 100) {
+            // Text exceeds 100 words, add see more/less functionality
+            const first100Words = words.slice(0, 100).join(' ');
+
+            const textSpan = document.createElement('span');
+            textSpan.textContent = first100Words + '... ';
+
+            const toggleLink = document.createElement('span');
+            toggleLink.className = 'see-more-toggle';
+            toggleLink.textContent = 'See more';
+
+            let isExpanded = false;
+            toggleLink.onclick = () => {
+                if (isExpanded) {
+                    textSpan.textContent = first100Words + '... ';
+                    toggleLink.textContent = 'See more';
+                    isExpanded = false;
+                } else {
+                    textSpan.textContent = fullText + ' ';
+                    toggleLink.textContent = 'See less';
+                    isExpanded = true;
+                }
+            };
+
+            dialoguePreviewText.appendChild(textSpan);
+            dialoguePreviewText.appendChild(toggleLink);
+        } else {
+            // Text is 100 words or less, show all
+            dialoguePreviewText.textContent = fullText;
+        }
+
         dialogueLink.href = location.link;
 
         dialogueBox.classList.remove('hidden');
@@ -295,12 +684,14 @@ class Game {
         // Close button handler
         document.getElementById('close-dialogue').onclick = () => {
             dialogueBox.classList.add('hidden');
+            this.resetDialogue();
         };
 
         // Close on clicking outside
         dialogueBox.onclick = (e) => {
             if (e.target === dialogueBox) {
                 dialogueBox.classList.add('hidden');
+                this.resetDialogue();
             }
         };
     }
@@ -308,44 +699,80 @@ class Game {
     checkProximity() {
         this.hoveredLocation = null;
         this.nearbyLocation = null;
+        this.nearbyObject = null;
 
-        this.locations.forEach(location => {
-            if (!location.loaded) return;
+        // Check objects first (they have priority)
+        this.objects.forEach(object => {
+            if (!object.loaded || object.collected) return;
 
-            // Calculate the inner 75% area for interaction detection
-            const activeAreaScale = 0.75;
-            const insetX = location.width * (1 - activeAreaScale) / 2;
-            const insetY = location.height * (1 - activeAreaScale) / 2;
-
-            const activeX = location.x + insetX;
-            const activeY = location.y + insetY;
-            const activeWidth = location.width * activeAreaScale;
-            const activeHeight = location.height * activeAreaScale;
-
-            const activeCenterX = activeX + activeWidth / 2;
-            const activeCenterY = activeY + activeHeight / 2;
+            const objectCenterX = object.x + object.width / 2;
+            const objectCenterY = object.y + object.height / 2;
 
             const distance = Math.hypot(
-                this.player.x - activeCenterX,
-                this.player.y - activeCenterY
+                this.player.x - objectCenterX,
+                this.player.y - objectCenterY
             );
 
-            // Check if close enough to interact
             if (distance < GAME_CONFIG.interactionRadius) {
-                this.nearbyLocation = location;
-            }
-
-            // Check if close enough to show hover state
-            if (distance < GAME_CONFIG.hoverRadius) {
-                this.hoveredLocation = location;
+                this.nearbyObject = object;
             }
         });
+
+        // Only check locations if no object is nearby
+        if (!this.nearbyObject) {
+            this.locations.forEach(location => {
+                if (!location.loaded) return;
+
+                // Calculate the inner 75% area for interaction detection
+                const activeAreaScale = 0.75;
+                const insetX = location.width * (1 - activeAreaScale) / 2;
+                const insetY = location.height * (1 - activeAreaScale) / 2;
+
+                const activeX = location.x + insetX;
+                const activeY = location.y + insetY;
+                const activeWidth = location.width * activeAreaScale;
+                const activeHeight = location.height * activeAreaScale;
+
+                const activeCenterX = activeX + activeWidth / 2;
+                const activeCenterY = activeY + activeHeight / 2;
+
+                const distance = Math.hypot(
+                    this.player.x - activeCenterX,
+                    this.player.y - activeCenterY
+                );
+
+                // Check if close enough to interact
+                if (distance < GAME_CONFIG.interactionRadius) {
+                    this.nearbyLocation = location;
+                }
+
+                // Check if close enough to show hover state
+                if (distance < GAME_CONFIG.hoverRadius) {
+                    this.hoveredLocation = location;
+                }
+            });
+        }
     }
 
     update() {
+        // Update acquisition animation if active
+        if (this.isAcquiringObject && this.acquisitionState) {
+            this.updateAcquisitionAnimation();
+        }
+
         this.handleInput();
+
+        // Store previous nearby location and object to detect changes
+        const previousNearbyLocation = this.nearbyLocation;
+        const previousNearbyObject = this.nearbyObject;
+
         this.checkProximity();
         this.pinBounce += 0.1; // Animate the location pin
+
+        // Reset dialogue if player moved away from both location and object
+        if (!this.nearbyLocation && !this.nearbyObject && (previousNearbyLocation || previousNearbyObject)) {
+            this.resetDialogue();
+        }
 
         // Update hover transitions for all locations
         this.locations.forEach(location => {
@@ -355,6 +782,17 @@ class Game {
             } else {
                 // Smoothly transition back to normal state
                 location.hoverTransition = Math.max(0, location.hoverTransition - 0.15);
+            }
+        });
+
+        // Update object animations (toggle between states)
+        this.objects.forEach(object => {
+            if (!object.loaded || object.collected) return;
+
+            object.animationCounter++;
+            if (object.animationCounter >= 30) { // Toggle every 30 frames
+                object.animationCounter = 0;
+                object.animationFrame = object.animationFrame === 1 ? 2 : 1;
             }
         });
 
@@ -553,6 +991,40 @@ class Game {
         this.ctx.globalAlpha = 1; // Reset alpha
     }
 
+    drawObjects() {
+        this.objects.forEach(object => {
+            if (!object.loaded || object.collected) return;
+
+            // Get the current animation frame image
+            const img = object.animationFrame === 1 ? object.image1Loaded : object.image2Loaded;
+
+            if (img) {
+                // Add hover animation when player is nearby
+                let yOffset = 0;
+                let scale = 1;
+                if (this.nearbyObject === object) {
+                    // Bounce animation using pinBounce counter
+                    yOffset = Math.sin(this.pinBounce * 2) * 5;
+                    // Subtle scale pulse
+                    scale = 1 + Math.sin(this.pinBounce * 2) * 0.1;
+                }
+
+                const scaledWidth = object.width * scale;
+                const scaledHeight = object.height * scale;
+                const scaledX = object.x - (scaledWidth - object.width) / 2;
+                const scaledY = object.y - (scaledHeight - object.height) / 2 + yOffset;
+
+                this.ctx.drawImage(
+                    img,
+                    scaledX,
+                    scaledY,
+                    scaledWidth,
+                    scaledHeight
+                );
+            }
+        });
+    }
+
     drawPlayer() {
         if (!this.spritesLoaded) {
             // Fallback: Simple colored square while sprites load
@@ -566,7 +1038,21 @@ class Game {
             return;
         }
 
-        // Get the appropriate sprite based on direction and animation frame
+        // If in acquisition animation step 1 (pose), show acquire sprite
+        if (this.isAcquiringObject && this.acquisitionState && this.acquisitionState.animationStep === 1) {
+            if (this.acquireSpriteLoaded && this.acquireSprite) {
+                this.ctx.drawImage(
+                    this.acquireSprite,
+                    this.player.x - this.player.size / 2,
+                    this.player.y - this.player.size / 2,
+                    this.player.size,
+                    this.player.size
+                );
+            }
+            return;
+        }
+
+        // Normal player rendering (including spin during step 0)
         const sprite = this.spriteImages[this.player.direction][this.player.animationFrame];
 
         if (sprite) {
@@ -579,6 +1065,56 @@ class Game {
                 this.player.size
             );
         }
+
+        // If in acquisition animation step 2+ (float), draw floating object
+        if (this.isAcquiringObject && this.acquisitionState && this.acquisitionState.animationStep >= 2) {
+            this.drawFloatingObject();
+        }
+    }
+
+    drawFloatingObject() {
+        const state = this.acquisitionState;
+        const object = state.object;
+
+        // Draw golden emanating lines
+        if (state.linesOpacity > 0) {
+            this.ctx.globalAlpha = state.linesOpacity;
+            this.ctx.strokeStyle = '#FFD700'; // Golden color
+            this.ctx.lineWidth = 2;
+
+            const centerX = this.player.x;
+            const centerY = this.player.y - state.floatY - 20;
+
+            // Draw radiating lines
+            for (let i = 0; i < 8; i++) {
+                const angle = (i / 8) * Math.PI * 2;
+                const length = 15 + Math.sin(this.pinBounce) * 5; // Pulsing effect
+
+                this.ctx.beginPath();
+                this.ctx.moveTo(centerX, centerY);
+                this.ctx.lineTo(
+                    centerX + Math.cos(angle) * length,
+                    centerY + Math.sin(angle) * length
+                );
+                this.ctx.stroke();
+            }
+
+            this.ctx.globalAlpha = 1;
+        }
+
+        // Draw the object image floating above player
+        if (object && object.image1Loaded) {
+            const floatX = this.player.x - object.width / 2;
+            const floatY = this.player.y - state.floatY - object.height - 10;
+
+            this.ctx.drawImage(
+                object.image1Loaded,
+                floatX,
+                floatY,
+                object.width,
+                object.height
+            );
+        }
     }
 
     render() {
@@ -586,6 +1122,7 @@ class Game {
 
         this.drawBackground();
         this.drawLocations();
+        this.drawObjects(); // Draw objects after locations
         this.drawTrail(); // Draw trail before player so it appears behind
         this.drawPlayer();
     }

@@ -3,14 +3,17 @@
 
 const LOCATIONS = [
     {
-        id: 'blueberry-hill',
-        name: 'Blueberry Hill',
-        image: 'assets/SitesNoTitle/Blueberry Hill.png',
-        imageHover: 'assets/SitesTitle/Blueberry Hill_title.png',
-        x: '13.5%',
-        y: '90.17%',
-        pinOffset: 45, // Custom offset for this location (45% lower)
-        description: 'Gay bar opened in the 1970s after Stonewall, serving as a meeting space for the Carolina Gay Association, an early UNC-Chapel Hill LGBTQ+ organization.',
+        id: 'cedar-chest',
+        name: 'Cedar Chest',
+        image: 'assets/SitesNoTitle/Cedar Chest.png',
+        imageHover: 'assets/SitesTitle/Cedar Chest_title.png',
+        x: '7.7%',
+        y: '10.9%',
+        dialogue: "Huh, it just looks like a normal apartment building.",
+        address: '311 S Lasalle St',
+        characteristics: ['lesbian', 'BIPOC', 'underground'],
+        previewText: 'edar Chest was an organization for lesbians of color, started by Janice “Jaye” Vaughn in 1994. Inspired by the Umoja group, a group of queer Black professionals in Durham, Vaughn wanted to create a lesbian organization to address the lack of women in Umoja. The organization’s name, ‘Cedar Chest,’ was inspired by a cedar chest her grandmother passed down to the women in the family who were to get married, filled with many gifts and goods. Vaughn used the cedar chest as a metaphor for the organization. In the promotional flyer, she said, “I am ready, as I hope you are, to establish in our small community a cedar chest of hope for lesbians of color. This chest is full of energy, love, hope, charity, trust, and confidentiality."',
+        description: 'Organization for lesbians of color founded in 1994, meeting in private homes to ensure confidentiality and address the lack of women in queer professional spaces.',
         link: 'https://www.opendurham.org/tours/queer-history-durham'
     },
     {
@@ -20,89 +23,11 @@ const LOCATIONS = [
         imageHover: 'assets/SitesTitle/Clown\'s Inn_title.png',
         x: '6.5%',
         y: '28.9%',
+        dialogue: "I feel like clown for not knowing what this place is…",
+        address: '2526 Erwin Rd',
+        characteristics: [],
+        previewText: 'The Clown’s Inn was opened sometime in the 1970s by Tommy Thompson, a former lover of prominent gay Durham bar owner Herb Rigsbee. It was first listed in the Damron Guides in 1980 and was believed to have been popular throughout this decade. The Damron Travel Guides were guides created by Bob Damron to identify gay-oriented spaces, especially for traveling men. As indicated by the name, this bar was clown-themed. Some believe that this was because of the popularity of the song “Send in the Clowns” at this time, while others think it was because Thompson was a former clown and that the decorations were from his collection.',
         description: 'Popular 1970s basement gay bar with pool tables and pinball machines, notable for attracting both gay men and a significant lesbian clientele.',
-        link: 'https://www.opendurham.org/tours/queer-history-durham'
-    },
-    {
-        id: 'carolina-theatre',
-        name: 'Carolina Theatre',
-        image: 'assets/SitesNoTitle/Carolina Theatre.png',
-        imageHover: 'assets/SitesTitle/Carolina Theatre_title.png',
-        x: '54.4%',
-        y: '35.5%',
-        description: 'Historic 1924 theater hosting an annual queer film festival since 1995, now called OUTSOUTH, the Southeast\'s second-largest.',
-        link: 'https://www.opendurham.org/tours/queer-history-durham'
-    },
-    {
-        id: 'old-courthouse',
-        name: 'Durham County Courthouse',
-        image: 'assets/SitesNoTitle/Old Courthouse.png',
-        imageHover: 'assets/SitesTitle/Old Courthouse_title.png',
-        x: '77.9%',
-        y: '84%',
-        description: 'Location of 1981 rally supporting the LGBTQ+ community following a fatal hate crime.',
-        link: 'https://www.opendurham.org/tours/queer-history-durham'
-    },
-    {
-        id: 'ywca',
-        name: 'Durham YWCA',
-        image: 'assets/SitesNoTitle/Durham YWCA.png',
-        imageHover: 'assets/SitesTitle/Durham YWCA_title.png',
-        x: '32.3%',
-        y: '63.1%',
-        description: 'Building housing Durham Women\'s Health Collective and Triangle Area Lesbian Feminists gatherings throughout the 1980s.',
-        link: 'https://www.opendurham.org/tours/queer-history-durham'
-    },
-    {
-        id: 'lambda-youth',
-        name: 'Lambda Youth Network',
-        image: 'assets/SitesNoTitle/Lamba Youth Network.png',
-        imageHover: 'assets/SitesTitle/Lamba Youth Network_title.png',
-        x: '58.8%',
-        y: '50.6%',
-        description: 'Youth-led LGBTQ+ leadership organization office location.',
-        link: 'https://www.opendurham.org/tours/queer-history-durham'
-    },
-    {
-        id: 'pauli-murray-mural',
-        name: 'Pauli Murray Mural',
-        image: 'assets/SitesNoTitle/Pauli Murray Mural.png',
-        imageHover: 'assets/SitesTitle/Pauli Murray Mural_title.png',
-        x: '6.75%',
-        y: '51.73%',
-        pinOffset: 45, // Custom offset for this location (45% lower)
-        description: 'Public artwork honoring influential queer civil rights activist, one of five murals throughout Durham celebrating Murray\'s legacy.',
-        link: 'https://www.opendurham.org/tours/queer-history-durham'
-    },
-    {
-        id: 'old-library',
-        name: 'Durham County Main Public Library',
-        image: 'assets/SitesNoTitle/Old Library.png',
-        imageHover: 'assets/SitesTitle/Old Library_title.png',
-        x: '87.8%',
-        y: '69.6%',
-        pinOffset: 45, // Custom offset for this location (45% lower)
-        description: 'Site of controversial 1986 LGBTQ+ exhibit that sparked the city\'s first Pride march with nearly 1,000 participants.',
-        link: 'https://www.opendurham.org/tours/queer-history-durham'
-    },
-    {
-        id: 'cedar-chest',
-        name: 'Cedar Chest',
-        image: 'assets/SitesNoTitle/Cedar Chest.png',
-        imageHover: 'assets/SitesTitle/Cedar Chest_title.png',
-        x: '7.7%',
-        y: '10.9%',
-        description: 'Organization for lesbians of color founded in 1994, meeting in private homes to ensure confidentiality and address the lack of women in queer professional spaces.',
-        link: 'https://www.opendurham.org/tours/queer-history-durham'
-    },
-    {
-        id: 'ringside',
-        name: "Boxer's Ringside",
-        image: 'assets/SitesNoTitle/Ringside.png',
-        imageHover: 'assets/SitesTitle/Ringside_title.png',
-        x: '60%',
-        y: '63.2%',
-        description: 'A 2000s venue described as "a gay bar for straight people" emphasizing local music.',
         link: 'https://www.opendurham.org/tours/queer-history-durham'
     },
     {
@@ -112,49 +37,11 @@ const LOCATIONS = [
         imageHover: 'assets/SitesTitle/Stormie Dae_title.png',
         x: '20.6%',
         y: '23.9%',
+        dialogue: "What's this painting of a drag queen doing in this garden?",
+        address: '2000 Lewis St',
+        characteristics: ['public-art'],
+        previewText: 'Stormie Daie is one of the prominent drag queens in the Durham community, coming from the House of Coxx. Stormie has a background in science, receiving their B.S. in Ecological and Environmental Science at Elon University. She uses her education in science and expertise with youth education to host “Science with Stormie” and is the local charter leader for Drag Queen Story Hour. Drag Queen Story Hour became a central target in a culture war in 2023, with conservatives throughout the United States attempting to implement anti-drag legislation, all of which have luckily been overturned or were never implemented.',
         description: 'Artwork at Sarah P. Duke Gardens featuring a prominent local drag queen, part of "The Black Lit Library" celebrating queer and BIPOC artists.',
-        link: 'https://www.opendurham.org/tours/queer-history-durham'
-    },
-    {
-        id: 'travis-place',
-        name: 'Travis Place',
-        image: 'assets/SitesNoTitle/Travis Place.png',
-        imageHover: 'assets/SitesTitle/Travis Place_title.png',
-        x: '75.3%',
-        y: '10.7%',
-        description: 'One of Durham\'s first openly lesbian-owned businesses (1983), a mail-order underwear catalog achieving $1 million in annual sales.',
-        link: 'https://www.opendurham.org/tours/queer-history-durham'
-    },
-    {
-        id: 'herbs-bar',
-        name: "Herb's Bar",
-        image: 'assets/SitesNoTitle/Herb\'s Bar.png',
-        imageHover: 'assets/SitesTitle/Herb\'s Bar_title.png',
-        x: '68.1%',
-        y: '23.9%',
-        description: 'Cruising spot for gay men listed in Damron Travel Guides, established after the Washington Duke Hotel\'s demolition.',
-        link: 'https://www.opendurham.org/tours/queer-history-durham'
-    },
-    {
-        id: 'competition-bar',
-        name: 'Competition Bar (711 Rigsbee Ave.)',
-        image: 'assets/SitesNoTitle/Competition Bar.png',
-        imageHover: 'assets/SitesTitle/Competition Bar_title.png',
-        x: '64.6%',
-        y: '8.45%',
-        pinOffset: 45, // Custom offset for this location (45% lower)
-        description: 'Long-standing queer venue housing multiple bars including Competition, Visions, Steel Blue, and The Bar, serving the LGBTQ+ community from 1991 onward.',
-        link: 'https://www.opendurham.org/tours/queer-history-durham'
-    },
-    {
-        id: 'washington-duke',
-        name: 'Washington Duke Hotel',
-        image: 'assets/SitesNoTitle/Washington Duke Hotel.png',
-        imageHover: 'assets/SitesTitle/Washington Duke Hotel_title.png',
-        x: '66.5%',
-        y: '38.3%',
-        pinOffset: 45, // Custom offset for this location (45% lower)
-        description: 'Demolished 1975 hotel housing Duke Tavern, an early mixed gay/straight gathering space in the 1960s.',
         link: 'https://www.opendurham.org/tours/queer-history-durham'
     },
     {
@@ -164,41 +51,71 @@ const LOCATIONS = [
         imageHover: 'assets/SitesTitle/The Feminary_title.png',
         x: '24.2%',
         y: '43.3%',
-        pinOffset: 45, // Custom offset for this location (45% lower)
+        pinOffset: 45,
+        dialogue: "This old building is still standing - impressive! It seems this is where the iconic lesbian-feminist journal of the South was printed.",
+        address: '604 W Chapel Hill St',
+        characteristics: ['BIPOC', 'lesbian'],
+        previewText: 'This building housed a branch of the War Resisters’ League, where local activist, co-founder of the Triangle Coalition of Black Lesbians and Gays and  Southerners on New Ground, Mandy Carter, used to work. This building was also a printing location of Femininary, originally published as The Feminist Newsletter. Revived in 1973 after a few years on hiatus, the newsletter began incorporating more references to lesbian-feminism. Starting with their Spring 1978 issue, Feminary decided to become, in their words, “a feminist journal of the South emphasizing the lesbian vision.”',
         description: 'Office space for War Resisters\' League and printing location of Feministry, a lesbian-feminist journal.',
         link: 'https://www.opendurham.org/tours/queer-history-durham'
     },
     {
+        id: 'pauli-murray-mural',
+        name: 'Pauli Murray Mural',
+        image: 'assets/SitesNoTitle/Pauli Murray Mural.png',
+        imageHover: 'assets/SitesTitle/Pauli Murray Mural_title.png',
+        x: '6.75%',
+        y: '51.73%',
+        pinOffset: 45,
+        dialogue: "(The mural says: \"It had taken my almost a lifetime to discover that true emancipation lies in the acceptance of the whole past, in serving strength from all my roots, in facing up to the degradation as well as the dignity of my ancestors.\")",
+        address: '1101 W Chapel Hill St',
+        characteristics: ['public-art'],
+        previewText: 'This specific mural is entitled “Pauli Murray Roots and Soul,” made by Brett Cook. It is one of five Pauli Murray murals located throughout Durham. Each of these murals includes quotes and/or imagery of Murray that resonate with their lasting impact.',
+        description: 'Public artwork honoring influential queer civil rights activist, one of five murals throughout Durham celebrating Murray\'s legacy.',
+        link: 'https://www.opendurham.org/tours/queer-history-durham'
+    },
+    {
         id: 'pauli-murray-house',
-        name: 'Pauli Murray House',
+        name: 'Pauli Murray Center',
         image: 'assets/SitesNoTitle/Pauli Murray House.png',
         imageHover: 'assets/SitesTitle/Pauli Murray House_title.png',
         x: '15%',
         y: '71.7%',
-        pinOffset: 45, // Custom offset for this location (45% lower)
+        pinOffset: 45,
+        dialogue: "Looks like this was the childhood home of queer civil rights icon Pauli Murray.",
+        address: '906 Carroll St',
+        characteristics: ['BIPOC'],
+        previewText: 'Pauli Murray (1910-1985) was an influential queer, civil rights, and women’s activist. Murray would use “he/she” pronouns to describe themselves in messages to family. Gender neutral and neo-pronouns were not nearly as prevalent or used in the same way they are used today, and therefore, it is hard to determine what pronouns to use to refer to Murray. Murray’s influence on the civil rights, women’s, and LGBTQ+ movements in the United States throughout the twentieth century cannot be overstated. She actively worked towards desegregation, unpacking racism in law, and promoting the recognition of Black women’s contributions to the activist movements during this time.',
         description: 'Childhood home of influential queer civil rights activist Pauli Murray.',
         link: 'https://www.opendurham.org/tours/queer-history-durham'
     },
     {
-        id: 'five-points',
-        name: 'Five Points',
-        image: 'assets/SitesNoTitle/Five Points.png',
-        imageHover: 'assets/SitesTitle/Five Points_title.png',
-        x: '50%',
-        y: '48%',
-        pinOffset: 15, // Standard offset (35%)
-        description: 'Site of 1981 march with 300 people protesting homophobic violence and supporting LGBTQ+ rights.',
+        id: 'blueberry-hill',
+        name: 'Blueberry Hill',
+        image: 'assets/SitesNoTitle/Blueberry Hill.png',
+        imageHover: 'assets/SitesTitle/Blueberry Hill_title.png',
+        x: '13.5%',
+        y: '90.17%',
+        pinOffset: 45,
+        dialogue: "Weird, this is just a Nissan dealership. I wonder if something significant used to be here?",
+        address: '3930 Chapel Hill Blvd Service Rd',
+        characteristics: ['demolished', 'gay'],
+        previewText: 'Bruce Derbin owned Blueberry Hill and intentionally created this space as a gay bar, reflecting the shift that occurred in the 1970s across the United States after the Stonewall Riots. Stonewall galvanized the LGBTQ+ community to make their presence known, while also still residing mostly in specific safe spaces like gay bars to protect themselves and enjoy the company of other queer individuals. Blueberry Hill also acted as a meeting space for the Carolina Gay Association. The Carolina Gay Association was a UNC-Chapel Hill organization, the first of its kind at UNC-Chapel Hill and one of the first in the state of North Carolina.',
+        description: 'Gay bar opened in the 1970s after Stonewall, serving as a meeting space for the Carolina Gay Association, an early UNC-Chapel Hill LGBTQ+ organization.',
         link: 'https://www.opendurham.org/tours/queer-history-durham'
     },
     {
-        id: 'elizabeth-st-umc',
-        name: 'Elizabeth St UMC',
-        image: 'assets/SitesNoTitle/Elizabeth St UMC.png',
-        imageHover: 'assets/SitesTitle/Elizabeth St UMC_title.png',
-        x: '96.24%',
-        y: '9.25%',
-        pinOffset: 15, // Standard offset (35%)
-        description: 'Historic church that served as an important gathering space for the LGBTQ+ community.',
+        id: 'ywca',
+        name: 'Durham YWCA',
+        image: 'assets/SitesNoTitle/Durham YWCA.png',
+        imageHover: 'assets/SitesTitle/Durham YWCA_title.png',
+        x: '32.3%',
+        y: '63.1%',
+        dialogue: "This appears to be an empty lot, I wonder what used to be here.",
+        address: '513 W Chapel Hill St',
+        characteristics: ['demolished', 'lesbian'],
+        previewText: 'The Young Women’s Christian Association (now the YWCA) was one of the first mainstream organizations in Durham to actively open itself to lesbians. The building was a gathering place for many local lesbian feminists. Within this building, lesbian feminist Durhamites formed the Durham Women’s Health Collective, a group that produced a newsletter and provided varied workshops and training sessions to women in Durham.',
+        description: 'Building housing Durham Women\'s Health Collective and Triangle Area Lesbian Feminists gatherings throughout the 1980s.',
         link: 'https://www.opendurham.org/tours/queer-history-durham'
     },
     {
@@ -208,9 +125,203 @@ const LOCATIONS = [
         imageHover: 'assets/SitesTitle/Harriet Tubman House_title.png',
         x: '36.5%',
         y: '76.6%',
-        pinOffset: 15, // Standard offset
+        pinOffset: 15,
+        dialogue: "It seems this building became the new home of the YWCA after the original was demolished.",
+        address: '312 E Umstead St',
+        characteristics: ['lesbian', 'BIPOC'],
+        previewText: 'In 1922, the Harriet Tubman YWCA opened on Umstead St. in Hayti, which was also an important gathering-place for women’s and civil rights activists in Durham. The Harriet Tubman YWCA also functioned as a gathering place for the Triangle Area Lesbian Feminists.',
         description: 'Historic location with significance to Durham\'s LGBTQ+ community.',
         link: 'https://www.opendurham.org/tours/queer-history-durham'
+    },
+    {
+        id: 'carolina-theatre',
+        name: 'Carolina Theatre',
+        image: 'assets/SitesNoTitle/Carolina Theatre.png',
+        imageHover: 'assets/SitesTitle/Carolina Theatre_title.png',
+        x: '54.4%',
+        y: '35.5%',
+        dialogue: "Wow, this building is almost a century old… It houses the biggest queer film festival in the South now.",
+        address: '309 W Morgan St',
+        characteristics: [],
+        previewText: 'The Carolina Theatre has been home to an annual queer film festival since 1995. This festival started as “A Salute to Pride,” and was renamed as the North Carolina Gay + Lesbian Film Festival the next year. They rebranded again in 2019 as the OUTSOUTH Queer Film Festival. Chuck Wheeler is the current festival manager and was included on Out’s Out100 2024 list, which celebrated “2024’s most impactful and influential LGBTQ+ people,” including other prominent queer icons like Cynthia Erivo, Trixie Mattel, and T.S. Madison. OUTSOUTH is currently the second biggest queer film festival in the southeast, a feat that is indicative of the queer community’s impact in the Triangle.',
+        description: 'Historic 1924 theater hosting an annual queer film festival since 1995, now called OUTSOUTH, the Southeast\'s second-largest.',
+        link: 'https://www.opendurham.org/tours/queer-history-durham'
+    },
+    {
+        id: 'lambda-youth',
+        name: 'Lambda Youth Network',
+        image: 'assets/SitesNoTitle/Lamba Youth Network.png',
+        imageHover: 'assets/SitesTitle/Lamba Youth Network_title.png',
+        x: '58.8%',
+        y: '50.6%',
+        dialogue: "This place used be a gathering place for LGBTQ+ youth.",
+        address: '115 Market St',
+        characteristics: [],
+        previewText: 'The North Carolina Lambda Youth Network worked out of one of the offices in the 115 Market St building. The North Carolina Lambed Youth Network was formed in July of 1996, as a youth-led leadership organization for LGBT+ youth. The program hosted a variety of events workshops, including ones for LGBT+ youth of color, a multigenerational working group advocating safer schooling for LGBT+ youth, and more.',
+        description: 'Youth-led LGBTQ+ leadership organization office location.',
+        link: 'https://www.opendurham.org/tours/queer-history-durham'
+    },
+    {
+        id: 'five-points',
+        name: 'Our Day Out Demonstration at Five Points',
+        image: 'assets/SitesNoTitle/Five Points.png',
+        imageHover: 'assets/SitesTitle/Five Points_title.png',
+        x: '50%',
+        y: '48%',
+        pinOffset: 15,
+        dialogue: "It seems like an ordinary plaza, but I get the sense there was an important historical moment here.",
+        address: '334 W Main St',
+        characteristics: ['protest'],
+        previewText: 'On June 27, 1981, 300 people gathered at the Five Points Plaza and marched up Chapel Hill Street, around the courthouse, and back down Main Street.  Formed in the shadow of extreme violence, the community bound together in this moment to stand up for their rights. The community was motivated to speak up due to the homophobic hate crime that took the life of Ronald "Sonny" Antonevitch and the murders of five Black activists at a Communist Workers Party rally by Nazis and members of the Ku Klux Klan. Debbie Swanner, co-founder of the Durham Radical Feminist Organizing Committee, and David Ransom were two of the organizers for the event. Other organizers include lesbian activist and writer, Mab Segrest, and gay activist and artist, Allan Troxler.',
+        description: 'Site of 1981 march with 300 people protesting homophobic violence and supporting LGBTQ+ rights.',
+        link: 'https://www.opendurham.org/tours/queer-history-durham'
+    },
+    {
+        id: 'ringside',
+        name: "Boxer's Ringside",
+        image: 'assets/SitesNoTitle/Ringside.png',
+        imageHover: 'assets/SitesTitle/Ringside_title.png',
+        x: '60%',
+        y: '63.2%',
+        dialogue: "Apparently this place was pretty popular! \"A gay bar for straight people.\"",
+        address: '308 W Main St',
+        characteristics: [],
+        previewText: 'Boxer’s Ringside opened in 2000 under the ownership of Michael Penny. Penny is well-known within the gay community in Durham, having survived a homophobic attack at Little River that took the life of Ronald Antonevitch, and for his ownership and participation at gay bars throughout the 1970s-2000s. He comes from the Penny family of the Penny Furniture Company. He also owned and operated Boxer’s, part of the namesake for Boxer’s Ringside, which was located on NC 15-501. This building was shaped like a flying saucer. When Boxer’s closed down, Penny opened Boxer’s Ringside. Penny states that Boxer’s Ringside was, “...a gay bar for straight people.” Penny didn’t intend to make Boxer’s Ringside an exclusive gay club, which alienated some of his gay audience from the original Boxer’s.',
+        description: 'A 2000s venue described as "a gay bar for straight people" emphasizing local music.',
+        link: 'https://www.opendurham.org/tours/queer-history-durham'
+    },
+    {
+        id: '42nd-street',
+        name: '42nd Street/The Power Co.',
+        image: 'assets/SitesNoTitle/Travis Place.png',
+        imageHover: 'assets/SitesTitle/Travis Place_title.png',
+        x: '75.3%',
+        y: '10.7%',
+        dialogue: "This disco used to be an pillar in the area as non-segregated gay bar.",
+        address: '315 W Main St',
+        characteristics: ['gay'],
+        previewText: '42nd Street opened in 1979 by owner Bruce Derbin, the same owner of Blueberry Hill. In 1983, it was renamed to the Power Company and was one of the most popular gay bars in the area. The location was previously a Rayless Department Store and was transformed with disco balls, dance floors, and pinball machines. It was known for its diverse demographics, non-segregated, and open to all people of different ages, ethnicities, races, and sexualities, indicative of shifting changes within the LGBTQ+ community for more inclusivity.',
+        description: 'One of Durham\'s first openly lesbian-owned businesses (1983), a mail-order underwear catalog achieving $1 million in annual sales.',
+        link: 'https://www.opendurham.org/tours/queer-history-durham'
+    },
+    {
+        id: 'travis-place',
+        name: 'Travis Place Warehouse',
+        image: 'assets/SitesNoTitle/Travis Place.png',
+        imageHover: 'assets/SitesTitle/Travis Place_title.png',
+        x: '75.3%',
+        y: '10.7%',
+        dialogue: "Huh, what's this? Women's underwear…?",
+        address: '708 Rigsbee Ave',
+        characteristics: ['demolished', 'lesbian'],
+        previewText: 'Durhamites Ginger Travis and Carol Place founded Travis Place in 1983, a mail-order underwear catalogue with the tagline “Natural fibers for women, from women.” Travis Place was one of Durham’s first three businesses to openly identify as lesbian-owned, along with Ladyslipper Music and Francesca’s Dessert Caffé. Francesca’s was originally opened in Perry St. (off of Ninth St.) in 1985, next to Travis Place’s first warehouse.  Their second warehouse was located at 708 Rigsbee Avenue. Travis Place was started at home by friends. But by the time they had moved to this warehouse in 1990, they had just passed $1 million in gross annual sales and had 27 employees.',
+        description: 'One of Durham\'s first openly lesbian-owned businesses (1983), a mail-order underwear catalog achieving $1 million in annual sales.',
+        link: 'https://www.opendurham.org/tours/queer-history-durham'
+    },
+    {
+        id: 'competition-bar',
+        name: 'Competition Bar',
+        image: 'assets/SitesNoTitle/Competition Bar.png',
+        imageHover: 'assets/SitesTitle/Competition Bar_title.png',
+        x: '64.6%',
+        y: '8.45%',
+        pinOffset: 45,
+        dialogue: "This modest building has lived many lifetimes…",
+        address: '711 Rigsbee Ave',
+        characteristics: [],
+        previewText: 'This building housed Competition, a gay bar which opened in 1991. Advertising in The Front Page, a gay and lesbian newspaper published in Raleigh, the same year, Competition boasted a “patio deck, outside bar, Bar-B-Q pit, Volleyball court (with sand), homey atmosphere, private parties.” This location would continue to hold its queer standing, coming under different ownership, names, and themes throughout the years, including Visions and All About Eve. There was a brief pause in its queer affiliations when it became a hip-hop themed club, Club Bedrock. Shortly after, the bar was bought by Theresa Harris and renamed Steel Blue, returning to its queer beginnings. Steel Blue was originally located along US 70 but was relocated to 711 Rigsbee. It then became The Bar...Durham, owned by queer couple, Renee and Roe, from 2011 to 2021. The couple decided to name it “The Bar” because, despite its continuous rebranding, it remained a queer staple and was referred to as “The Bar” throughout its queer tenure and ever-changing name/ownership. Today, it is still owned by Renee and is now rebranded to The Pickleback 2.',
+        description: 'Long-standing queer venue housing multiple bars including Competition, Visions, Steel Blue, and The Bar, serving the LGBTQ+ community from 1991 onward.',
+        link: 'https://www.opendurham.org/tours/queer-history-durham'
+    },
+    {
+        id: 'herbs-bar',
+        name: "Herb's Bar",
+        image: 'assets/SitesNoTitle/Herb\'s Bar.png',
+        imageHover: 'assets/SitesTitle/Herb\'s Bar_title.png',
+        x: '68.1%',
+        y: '23.9%',
+        dialogue: "This is just a parking lot. Cool motorcycle though…",
+        address: '228 Hunt St',
+        characteristics: ['demolished', 'gay'],
+        previewText: 'After the closure of Duke’s Tavern due to the destruction of the Washington Duke Hotel, which we will discuss shortly, owner Herb Rigsbee created Herb’s Bar/Lounge. Herb’s Bar was listed in the Damron Travel Guides starting in 1978, a few years after Duke’s Tavern was demolished. In the Travel Guides, Herb’s Bar/Lounge is classified as a “cruisy” area, meaning gay men would frequent this spot for sex. It is also listed as “some OC” and “SM.” OC was designated “older crowd,” “while “SM” stands for “some motorcycle and leather.” According to the Mapping the Gay Guides website, a digital history project that has mapped the locations listed in the Damron Guides, “American motorcycle culture began in the 1940s and 1950s, and gay motorcycle clubs gained in popularity around the same time. Some participants in the culture found refuge in these roaming motorcycle communities as a replacement for meeting spots for bars (which could be unsafe, especially with constant police raids). Gay leather culture also allowed some gay men to embrace a masculine gay identity, one in opposition to the stereotyped femininity of “fairy” gay men.”',
+        description: 'Cruising spot for gay men listed in Damron Travel Guides, established after the Washington Duke Hotel\'s demolition.',
+        link: 'https://www.opendurham.org/tours/queer-history-durham'
+    },
+    {
+        id: 'washington-duke',
+        name: "The Duke's Tavern at Washington Duke Hotel",
+        image: 'assets/SitesNoTitle/Washington Duke Hotel.png',
+        imageHover: 'assets/SitesTitle/Washington Duke Hotel_title.png',
+        x: '66.5%',
+        y: '38.3%',
+        pinOffset: 45,
+        dialogue: "This the CCB plaza now, but it just to be one of Durham's most iconic buildings, the Washington Duke Hotel. In the basement was Durham's first gay bar.",
+        address: '202 Corcoran St',
+        characteristics: ['demolished', 'gay'],
+        previewText: 'Located in the basement of the former Washington Duke/Jack Tar Hotel was the Washington Duke Hotel Bar, also known as The Duke Tavern or Dukes of Durham. While not exclusively a gay bar, it was at one point owned by a gay man, Herb Rigsbee, and was open to queer patrons, namely gay men.  It was also one of the few places in the Triangle area where members of the LGBTQ+ community could meet.The bar is unique, as it was identified as having a larger queer audience in the 1960s, a time when gay life was largely celebrated in private spaces. However, the bar was still not exclusively LGBTQ+. It is listed as a “mixed” site in the Damron Gay Travel Guides*, meaning it was an identified space for both gay and straight audiences. It is the only location that remains throughout the 1965-1970s in the Damron travel guides, indicating that it was one of the few known gathering spots for the LGBTQ+ community.',
+        description: 'Demolished 1975 hotel housing Duke Tavern, an early mixed gay/straight gathering space in the 1960s.',
+        link: 'https://www.opendurham.org/tours/queer-history-durham'
+    },
+    {
+        id: 'old-library',
+        name: 'Old Library',
+        image: 'assets/SitesNoTitle/Old Library.png',
+        imageHover: 'assets/SitesTitle/Old Library_title.png',
+        x: '87.8%',
+        y: '69.6%',
+        pinOffset: 45,
+        dialogue: "The old library was one of the earliest resources for the queer community, apparently stirring some controversy…",
+        address: '300 N Roxboro St',
+        characteristics: ['demolished'],
+        previewText: 'In 1986, the Durham Public Library granted the Lesbian and Gay Pride ‘86 Committee and the Lesbian and Gay Health Project use of their three community-oriented display cases for June. The organizations used the cases to display materials about LGBT+ lives, poetry, AIDS and health concerns, posters, and more. This exhibit sparked enormous controversy within the city, from county officials, local news stations, religious leaders, and more. Opponents formed a group called the “Durham Coalition for Decency,” advocating for its removal. Soon after, working with Durham’s Gay Pride Committee, Mayor Wib Gulley signed an anti-discrimination proclamation specifically supporting LGBT+ peoples’ rights for safety and participation in public life. This was part of the plans to run the city’s first-ever Pride march. The backlash was immediate, with forces trying to recall Mayor Gulley. As strong as the backlash was, many members of the Durham community rallied in support of Mayor Gulley, including many local religious leaders. In the end, organizers couldn’t gather enough signatures to force a recall election, and Mayor Gulley remained as mayor. On June 28th 1986, the Triangle Lesbian and Gay Alliance held Durham’s first pride march, themed “Out Today, Out to Stay.” Nearly 1,000 people marched from Ninth Street to the Reservoir on Hillsborough Road.',
+        description: 'Site of controversial 1986 LGBTQ+ exhibit that sparked the city\'s first Pride march with nearly 1,000 participants.',
+        link: 'https://www.opendurham.org/tours/queer-history-durham'
+    },
+    {
+        id: 'old-courthouse',
+        name: 'Little River Protest at Old Courthouse',
+        image: 'assets/SitesNoTitle/Old Courthouse.png',
+        imageHover: 'assets/SitesTitle/Old Courthouse_title.png',
+        x: '77.9%',
+        y: '84%',
+        dialogue: "This was the site of a historic demonstration in response to the gay hate crime in Durham, the murder of Sonny Antonevitch at Little River.",
+        address: '201 E Main St',
+        characteristics: ['protest'],
+        previewText: 'In 1981, a protest happened here that helped define the course of Durham’s LGBT+ activism. In April of that year, on the banks of the Little River near Johnston Mills Road, Ronald “Sunny” Antonevitch was killed in a hate crime. In response to the violence, 125 people rallied here, on April 17th, 1981, to make a united stand in support of the LGBT+ community.',
+        description: 'Location of 1981 rally supporting the LGBTQ+ community following a fatal hate crime.',
+        link: 'https://www.opendurham.org/tours/queer-history-durham'
+    },
+    {
+        id: 'elizabeth-st-umc',
+        name: 'Elizabeth St UMC',
+        image: 'assets/SitesNoTitle/Elizabeth St UMC.png',
+        imageHover: 'assets/SitesTitle/Elizabeth St UMC_title.png',
+        x: '96.24%',
+        y: '9.25%',
+        pinOffset: 15,
+        dialogue: "This congregation has played an important role in affirming queer identities since the 80's.",
+        address: '1209 N Elizabeth St',
+        characteristics: [],
+        previewText: 'The church currently known as Elizabeth St. UMC was the result of the merger of two congregations in Durham: Resurrection UMC and Calvary UMC. Calvary UMC voted to become a Reconciling Congregation in 2002, a network of ministries that actively affirms the participation of LGBTQ+ people in the United Methodist Church. Durham’s LGBTQ+ community has had support from religious leaders for decades. During the 1986 attempted recall of Mayor Gulley, local religious leaders published a paid advertisement in the Durham Morning Herald signed by 100 “men and women of faith,” thanking the mayor for standing for the “just treatment of homosexual persons in regard to their civil liberties, equal rights and protection under the law.”',
+        description: 'Historic church that served as an important gathering space for the LGBTQ+ community.',
+        link: 'https://www.opendurham.org/tours/queer-history-durham'
+    }
+];
+
+// Collectible objects
+const OBJECTS = [
+    {
+        id: 'zine',
+        name: 'Pride & Preservation Zine',
+        type: 'collectible',
+        image1: 'assets/objects/zine-sprite 1.png',
+        image2: 'assets/objects/zine-sprite 2.png',
+        x: '39%', // Between Carolina Theatre (54.4%) and Feminary (24.2%)
+        y: '39%', // Between Carolina Theatre (35.5%) and Feminary (43.3%)
+        dialogue: "It's a zine!",
+        buttonText: "Add to inventory",
+        acquireMessage: "(You found the Pride & Preservation zine!)",
+        collected: false
     }
 ];
 
@@ -222,5 +333,6 @@ const GAME_CONFIG = {
     interactionRadius: 80, // Distance player needs to be to interact with location
     hoverRadius: 80, // Distance to trigger hover state (title image)
     pinOffset: 15, // Vertical offset for location pin (positive = lower, overlapping image)
-    imageScale: 0.2 // Scale factor for building images (0.2 = 20% of original size)
+    imageScale: 0.2, // Scale factor for building images (0.2 = 20% of original size)
+    objectScale: 0.15 // Scale factor for collectible objects
 };

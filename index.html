@@ -3,34 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Hyperlocal Durham: Queer History</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=12">
 </head>
 <body>
     <div id="game-container">
         <img id="title-graphic" src="assets/pride+pres title.png" alt="Pride + Preservation">
 
-        <!-- Controls info -->
-        <div id="controls">
-            <p>Use Arrow Keys or WASD to move | Press SPACE to interact with objects</p>
-        </div>
-
         <div id="game-wrapper">
             <canvas id="gameCanvas"></canvas>
         </div>
+
+        <!-- Character Dialogue (always visible) -->
+        <div id="character-dialogue">
+            <div class="character-bust"></div>
+            <div class="character-dialogue-box">
+                <p class="character-text">I can use Arrow Keys or WASD to move and press SPACE to interact with objects.</p>
+                <button class="learn-more-btn" style="display: none;">Learn More</button>
+            </div>
+        </div>
+
+        <!-- Main Page Button -->
+        <div id="main-page-button-container">
+            <a href="https://hyperlocaldurham.com" target="_blank" class="main-page-btn">Go to Hyperlocal Durham main page &gt;</a>
+        </div>
+
+        <!-- Footer Credits -->
+        <footer id="credits">
+            <p>Map design and minigame created by K. L. Graywill © Hyperlocal Studios 2025</p>
+            <p>Research compiled by Preservation Durham for the <a href="https://www.opendurham.org/tours/queer-history-durham" target="_blank">Durham Queer History Tour</a></p>
+        </footer>
 
         <!-- Dialogue popup -->
         <div id="dialogue-box" class="hidden">
             <div class="dialogue-content">
                 <button id="close-dialogue" class="close-btn">&times;</button>
-                <h2 id="dialogue-title"></h2>
-                <p id="dialogue-text"></p>
-                <a id="dialogue-link" href="#" target="_blank" class="learn-more">Learn more at OpenDurham.org &rarr;</a>
+
+                <!-- Section 1: Header with image and basic facts -->
+                <div class="dialogue-header">
+                    <div class="dialogue-image-container">
+                        <img id="dialogue-image" src="" alt="">
+                    </div>
+                    <div class="dialogue-facts">
+                        <h2 id="dialogue-title"></h2>
+                        <p id="dialogue-address" class="address"></p>
+                    </div>
+                </div>
+
+                <!-- Section 2: Characteristics icons -->
+                <div id="dialogue-characteristics" class="characteristics-row"></div>
+
+                <!-- Section 3: Preview text and Read More button -->
+                <div class="dialogue-preview">
+                    <p id="dialogue-preview-text"></p>
+                    <a id="dialogue-link" href="#" target="_blank" class="read-more-btn">Read More at OpenDurham &rarr;</a>
+                </div>
             </div>
         </div>
     </div>
 
-    <script src="locationData.js"></script>
-    <script src="game.js"></script>
+    <script src="locationData.js?v=8"></script>
+    <script src="game.js?v=13"></script>
 </body>
 </html>
