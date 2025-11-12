@@ -300,95 +300,46 @@ class Game {
             ? '/QueerDurham/'
             : './';
 
-        // Calculate total images to load
-        this.totalImagesToLoad += LOCATIONS.length * 2; // Normal + hover for each
+        // Load all locations immediately - browser will handle throttling
+        LOCATIONS.forEach(location => {
+            const locationData = {
+                ...location,
+                normalImage: null,
+                hoverImage: null,
+                loaded: false,
+                hoverTransition: 0
+            };
 
-        // Load locations sequentially with delay to prevent browser timeout
-        // Browsers limit concurrent connections (typically 6-8 per domain)
-        const DELAY_BETWEEN_LOCATIONS = 500; // 500ms delay between each location (increased for reliability)
+            // Load normal image
+            const normalImg = new Image();
+            normalImg.onload = () => {
+                locationData.normalImage = normalImg;
+                locationData.width = normalImg.width * GAME_CONFIG.imageScale;
+                locationData.height = normalImg.height * GAME_CONFIG.imageScale;
+                console.log(`✓ Loaded ${location.name} normal`);
+                this.checkLocationLoaded(locationData);
+            };
+            normalImg.onerror = () => {
+                console.error(`✗ Failed: ${location.name} normal - ${basePath}${location.image}`);
+            };
+            normalImg.src = `${basePath}${location.image}`;
 
-        LOCATIONS.forEach((location, index) => {
-            setTimeout(() => {
-                console.log(`Starting to load location ${index + 1}/${LOCATIONS.length}: ${location.name}`);
-                this.loadSingleLocation(location, basePath);
-            }, index * DELAY_BETWEEN_LOCATIONS);
+            // Load hover image
+            const hoverImg = new Image();
+            hoverImg.onload = () => {
+                locationData.hoverImage = hoverImg;
+                console.log(`✓ Loaded ${location.name} hover`);
+                this.checkLocationLoaded(locationData);
+            };
+            hoverImg.onerror = () => {
+                console.error(`✗ Failed: ${location.name} hover - ${basePath}${location.imageHover}`);
+            };
+            hoverImg.src = `${basePath}${location.imageHover}`;
+
+            this.locations.push(locationData);
         });
 
-        console.log(`Will load ${LOCATIONS.length} locations over ${(LOCATIONS.length * DELAY_BETWEEN_LOCATIONS) / 1000} seconds`);
-    }
-
-    loadSingleLocation(location, basePath) {
-        const locationData = {
-            ...location,
-            normalImage: null,
-            hoverImage: null,
-            loaded: false,
-            hoverTransition: 0 // 0 = normal, 1 = fully hovered (for smooth animation)
-        };
-
-        // Cache-busting timestamp
-        const cacheBuster = `?v=${Date.now()}`;
-
-        // Build full paths (don't encode - browsers handle spaces in Image src automatically)
-        const normalPath = basePath + location.image;
-        const hoverPath = basePath + location.imageHover;
-
-        // Load normal image with timeout detection
-        const normalImg = new Image();
-        const normalTimeout = setTimeout(() => {
-            if (!locationData.normalImage) {
-                console.warn(`⚠ Timeout loading ${location.name} normal image after 10 seconds`);
-            }
-        }, 10000);
-
-        normalImg.onload = () => {
-            clearTimeout(normalTimeout);
-            locationData.normalImage = normalImg;
-            locationData.width = normalImg.width * GAME_CONFIG.imageScale;
-            locationData.height = normalImg.height * GAME_CONFIG.imageScale;
-            this.imagesLoaded++;
-            console.log(`✓ Loaded ${location.name} normal (${this.imagesLoaded}/${this.totalImagesToLoad})`);
-
-            this.checkLocationLoaded(locationData);
-        };
-        normalImg.onerror = (e) => {
-            clearTimeout(normalTimeout);
-            console.error(`✗ Failed to load ${location.name} normal image`);
-            console.error(`   Attempted path: ${normalPath}${cacheBuster}`);
-            console.error(`   Error:`, e);
-            // Retry without encoding in case that's the issue
-            this.retryImageLoad(normalImg, `${basePath}${location.image}`, `${location.name} (normal)`);
-        };
-        console.log(`  → Loading normal: ${normalPath}${cacheBuster}`);
-        normalImg.src = `${normalPath}${cacheBuster}`;
-
-        // Load hover image (with title) with timeout detection
-        const hoverImg = new Image();
-        const hoverTimeout = setTimeout(() => {
-            if (!locationData.hoverImage) {
-                console.warn(`⚠ Timeout loading ${location.name} hover image after 10 seconds`);
-            }
-        }, 10000);
-
-        hoverImg.onload = () => {
-            clearTimeout(hoverTimeout);
-            locationData.hoverImage = hoverImg;
-            this.imagesLoaded++;
-            console.log(`✓ Loaded ${location.name} hover (${this.imagesLoaded}/${this.totalImagesToLoad})`);
-            this.checkLocationLoaded(locationData);
-        };
-        hoverImg.onerror = (e) => {
-            clearTimeout(hoverTimeout);
-            console.error(`✗ Failed to load ${location.name} hover image`);
-            console.error(`   Attempted path: ${hoverPath}${cacheBuster}`);
-            console.error(`   Error:`, e);
-            // Retry without encoding in case that's the issue
-            this.retryImageLoad(hoverImg, `${basePath}${location.imageHover}`, `${location.name} (hover)`);
-        };
-        console.log(`  → Loading hover: ${hoverPath}${cacheBuster}`);
-        hoverImg.src = `${hoverPath}${cacheBuster}`;
-
-        this.locations.push(locationData);
+        console.log(`Loading ${LOCATIONS.length} locations simultaneously`);
     }
 
     loadObjects() {
