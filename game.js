@@ -230,10 +230,21 @@ class Game {
             });
         };
         bgImage.onerror = () => {
-            console.error(`Failed to load background map: ${basePath}assets/BackgroundMap.png`);
-            this.retryImageLoad(bgImage, `${basePath}assets/BackgroundMap.png`, 'Background Map');
+            // If WebP fails, try PNG fallback
+            if (bgImage.src.includes('.webp')) {
+                console.log('WebP not supported, falling back to PNG');
+                bgImage.onerror = () => {
+                    console.error(`Failed to load background map: ${basePath}assets/BackgroundMap.png`);
+                    this.retryImageLoad(bgImage, `${basePath}assets/BackgroundMap.png`, 'Background Map');
+                };
+                bgImage.src = `${basePath}assets/BackgroundMap.png`;
+            } else {
+                console.error(`Failed to load background map: ${basePath}assets/BackgroundMap.webp`);
+                this.retryImageLoad(bgImage, `${basePath}assets/BackgroundMap.png`, 'Background Map');
+            }
         };
-        bgImage.src = `${basePath}assets/BackgroundMap.png`;
+        // Try WebP first (83% smaller), fall back to PNG if not supported
+        bgImage.src = `${basePath}assets/BackgroundMap.webp`;
     }
 
     retryImageLoad(img, src, name, attempt = 1, maxAttempts = 3) {
