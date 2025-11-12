@@ -302,20 +302,18 @@ class Game {
         // Calculate total images to load
         this.totalImagesToLoad += LOCATIONS.length * 2; // Normal + hover for each
 
-        // Load locations in batches to prevent browser timeout
-        const BATCH_SIZE = 4; // Load 4 locations at a time
-        const BATCH_DELAY = 100; // 100ms delay between batches
+        // Load locations sequentially with delay to prevent browser timeout
+        // Browsers limit concurrent connections (typically 6-8 per domain)
+        const DELAY_BETWEEN_LOCATIONS = 200; // 200ms delay between each location
 
-        for (let i = 0; i < LOCATIONS.length; i += BATCH_SIZE) {
-            const batch = LOCATIONS.slice(i, i + BATCH_SIZE);
-            const delay = (i / BATCH_SIZE) * BATCH_DELAY;
-
+        LOCATIONS.forEach((location, index) => {
             setTimeout(() => {
-                batch.forEach(location => {
-                    this.loadSingleLocation(location, basePath);
-                });
-            }, delay);
-        }
+                console.log(`Starting to load location ${index + 1}/${LOCATIONS.length}: ${location.name}`);
+                this.loadSingleLocation(location, basePath);
+            }, index * DELAY_BETWEEN_LOCATIONS);
+        });
+
+        console.log(`Will load ${LOCATIONS.length} locations over ${(LOCATIONS.length * DELAY_BETWEEN_LOCATIONS) / 1000} seconds`);
     }
 
     loadSingleLocation(location, basePath) {
@@ -327,35 +325,55 @@ class Game {
             hoverTransition: 0 // 0 = normal, 1 = fully hovered (for smooth animation)
         };
 
-        // Load normal image
+        // Load normal image with timeout detection
         const normalImg = new Image();
+        const normalTimeout = setTimeout(() => {
+            if (!locationData.normalImage) {
+                console.warn(`Timeout loading ${location.name} normal image after 10 seconds`);
+            }
+        }, 10000);
+
         normalImg.onload = () => {
+            clearTimeout(normalTimeout);
             locationData.normalImage = normalImg;
             locationData.width = normalImg.width * GAME_CONFIG.imageScale;
             locationData.height = normalImg.height * GAME_CONFIG.imageScale;
             this.imagesLoaded++;
-            console.log(`Loaded ${location.name} normal (${this.imagesLoaded}/${this.totalImagesToLoad})`);
+            console.log(`✓ Loaded ${location.name} normal (${this.imagesLoaded}/${this.totalImagesToLoad})`);
 
             this.checkLocationLoaded(locationData);
         };
-        normalImg.onerror = () => {
-            console.error(`Failed to load location image: ${basePath}${location.image}`);
+        normalImg.onerror = (e) => {
+            clearTimeout(normalTimeout);
+            console.error(`✗ Failed to load ${location.name} normal image:`, e);
+            console.error(`   Path: ${basePath}${location.image}`);
             this.retryImageLoad(normalImg, `${basePath}${location.image}`, `${location.name} (normal)`);
         };
+        console.log(`  → Loading normal: ${basePath}${location.image}`);
         normalImg.src = `${basePath}${location.image}`;
 
-        // Load hover image (with title)
+        // Load hover image (with title) with timeout detection
         const hoverImg = new Image();
+        const hoverTimeout = setTimeout(() => {
+            if (!locationData.hoverImage) {
+                console.warn(`Timeout loading ${location.name} hover image after 10 seconds`);
+            }
+        }, 10000);
+
         hoverImg.onload = () => {
+            clearTimeout(hoverTimeout);
             locationData.hoverImage = hoverImg;
             this.imagesLoaded++;
-            console.log(`Loaded ${location.name} hover (${this.imagesLoaded}/${this.totalImagesToLoad})`);
+            console.log(`✓ Loaded ${location.name} hover (${this.imagesLoaded}/${this.totalImagesToLoad})`);
             this.checkLocationLoaded(locationData);
         };
-        hoverImg.onerror = () => {
-            console.error(`Failed to load hover image: ${basePath}${location.imageHover}`);
+        hoverImg.onerror = (e) => {
+            clearTimeout(hoverTimeout);
+            console.error(`✗ Failed to load ${location.name} hover image:`, e);
+            console.error(`   Path: ${basePath}${location.imageHover}`);
             this.retryImageLoad(hoverImg, `${basePath}${location.imageHover}`, `${location.name} (hover)`);
         };
+        console.log(`  → Loading hover: ${basePath}${location.imageHover}`);
         hoverImg.src = `${basePath}${location.imageHover}`;
 
         this.locations.push(locationData);
