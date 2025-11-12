@@ -244,7 +244,8 @@ class Game {
             }
         };
         // Try WebP first (83% smaller), fall back to PNG if not supported
-        bgImage.src = `${basePath}assets/BackgroundMap.webp`;
+        // Add cache buster to ensure fresh load
+        bgImage.src = `${basePath}assets/BackgroundMap.webp?v=${Date.now()}`;
     }
 
     retryImageLoad(img, src, name, attempt = 1, maxAttempts = 3) {
@@ -325,6 +326,9 @@ class Game {
             hoverTransition: 0 // 0 = normal, 1 = fully hovered (for smooth animation)
         };
 
+        // Cache-busting timestamp
+        const cacheBuster = `?v=${Date.now()}`;
+
         // Load normal image with timeout detection
         const normalImg = new Image();
         const normalTimeout = setTimeout(() => {
@@ -346,11 +350,11 @@ class Game {
         normalImg.onerror = (e) => {
             clearTimeout(normalTimeout);
             console.error(`✗ Failed to load ${location.name} normal image:`, e);
-            console.error(`   Path: ${basePath}${location.image}`);
+            console.error(`   Path: ${basePath}${location.image}${cacheBuster}`);
             this.retryImageLoad(normalImg, `${basePath}${location.image}`, `${location.name} (normal)`);
         };
-        console.log(`  → Loading normal: ${basePath}${location.image}`);
-        normalImg.src = `${basePath}${location.image}`;
+        console.log(`  → Loading normal: ${basePath}${location.image}${cacheBuster}`);
+        normalImg.src = `${basePath}${location.image}${cacheBuster}`;
 
         // Load hover image (with title) with timeout detection
         const hoverImg = new Image();
@@ -370,11 +374,11 @@ class Game {
         hoverImg.onerror = (e) => {
             clearTimeout(hoverTimeout);
             console.error(`✗ Failed to load ${location.name} hover image:`, e);
-            console.error(`   Path: ${basePath}${location.imageHover}`);
+            console.error(`   Path: ${basePath}${location.imageHover}${cacheBuster}`);
             this.retryImageLoad(hoverImg, `${basePath}${location.imageHover}`, `${location.name} (hover)`);
         };
-        console.log(`  → Loading hover: ${basePath}${location.imageHover}`);
-        hoverImg.src = `${basePath}${location.imageHover}`;
+        console.log(`  → Loading hover: ${basePath}${location.imageHover}${cacheBuster}`);
+        hoverImg.src = `${basePath}${location.imageHover}${cacheBuster}`;
 
         this.locations.push(locationData);
     }
