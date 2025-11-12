@@ -9,6 +9,10 @@ class Game {
         this.canvas.width = GAME_CONFIG.canvasWidth;
         this.canvas.height = GAME_CONFIG.canvasHeight;
 
+        // Image loading tracking
+        this.totalImagesToLoad = 0;
+        this.imagesLoaded = 0;
+
         // Player setup
         this.player = {
             x: GAME_CONFIG.canvasWidth / 2,
@@ -195,6 +199,7 @@ class Game {
             ? '/QueerDurham/'
             : './';
 
+        this.totalImagesToLoad++;
         const bgImage = new Image();
         bgImage.onload = () => {
             this.backgroundMap = bgImage;
@@ -202,6 +207,9 @@ class Game {
             this.backgroundMapWidth = bgImage.width * 0.2;
             this.backgroundMapHeight = bgImage.height * 0.2;
             this.backgroundMapLoaded = true;
+            this.imagesLoaded++;
+
+            console.log(`Background map loaded (${this.imagesLoaded}/${this.totalImagesToLoad})`);
 
             // Resize canvas to match background map
             this.canvas.width = this.backgroundMapWidth;
@@ -223,8 +231,24 @@ class Game {
         };
         bgImage.onerror = () => {
             console.error(`Failed to load background map: ${basePath}assets/BackgroundMap.png`);
+            this.retryImageLoad(bgImage, `${basePath}assets/BackgroundMap.png`, 'Background Map');
         };
         bgImage.src = `${basePath}assets/BackgroundMap.png`;
+    }
+
+    retryImageLoad(img, src, name, attempt = 1, maxAttempts = 3) {
+        if (attempt >= maxAttempts) {
+            console.error(`Failed to load ${name} after ${maxAttempts} attempts`);
+            return;
+        }
+
+        console.log(`Retrying ${name} (attempt ${attempt + 1}/${maxAttempts})...`);
+        setTimeout(() => {
+            img.onerror = () => {
+                this.retryImageLoad(img, src, name, attempt + 1, maxAttempts);
+            };
+            img.src = src + '?retry=' + attempt;
+        }, 1000 * attempt); // Exponential backoff: 1s, 2s, 3s
     }
 
     setupInputHandlers() {
@@ -274,17 +298,22 @@ class Game {
                 hoverTransition: 0 // 0 = normal, 1 = fully hovered (for smooth animation)
             };
 
+            this.totalImagesToLoad += 2; // Normal + hover image
+
             // Load normal image
             const normalImg = new Image();
             normalImg.onload = () => {
                 locationData.normalImage = normalImg;
                 locationData.width = normalImg.width * GAME_CONFIG.imageScale;
                 locationData.height = normalImg.height * GAME_CONFIG.imageScale;
+                this.imagesLoaded++;
+                console.log(`Loaded ${location.name} normal (${this.imagesLoaded}/${this.totalImagesToLoad})`);
 
                 this.checkLocationLoaded(locationData);
             };
             normalImg.onerror = () => {
                 console.error(`Failed to load location image: ${basePath}${location.image}`);
+                this.retryImageLoad(normalImg, `${basePath}${location.image}`, `${location.name} (normal)`);
             };
             normalImg.src = `${basePath}${location.image}`;
 
@@ -292,10 +321,13 @@ class Game {
             const hoverImg = new Image();
             hoverImg.onload = () => {
                 locationData.hoverImage = hoverImg;
+                this.imagesLoaded++;
+                console.log(`Loaded ${location.name} hover (${this.imagesLoaded}/${this.totalImagesToLoad})`);
                 this.checkLocationLoaded(locationData);
             };
             hoverImg.onerror = () => {
                 console.error(`Failed to load hover image: ${basePath}${location.imageHover}`);
+                this.retryImageLoad(hoverImg, `${basePath}${location.imageHover}`, `${location.name} (hover)`);
             };
             hoverImg.src = `${basePath}${location.imageHover}`;
 
