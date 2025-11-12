@@ -305,7 +305,7 @@ class Game {
 
         // Load locations sequentially with delay to prevent browser timeout
         // Browsers limit concurrent connections (typically 6-8 per domain)
-        const DELAY_BETWEEN_LOCATIONS = 200; // 200ms delay between each location
+        const DELAY_BETWEEN_LOCATIONS = 500; // 500ms delay between each location (increased for reliability)
 
         LOCATIONS.forEach((location, index) => {
             setTimeout(() => {
@@ -329,9 +329,9 @@ class Game {
         // Cache-busting timestamp
         const cacheBuster = `?v=${Date.now()}`;
 
-        // Encode the image paths to handle spaces and special characters
-        const normalPath = encodeURI(basePath + location.image);
-        const hoverPath = encodeURI(basePath + location.imageHover);
+        // Build full paths (don't encode - browsers handle spaces in Image src automatically)
+        const normalPath = basePath + location.image;
+        const hoverPath = basePath + location.imageHover;
 
         // Load normal image with timeout detection
         const normalImg = new Image();
