@@ -329,11 +329,15 @@ class Game {
         // Cache-busting timestamp
         const cacheBuster = `?v=${Date.now()}`;
 
+        // Encode the image paths to handle spaces and special characters
+        const normalPath = encodeURI(basePath + location.image);
+        const hoverPath = encodeURI(basePath + location.imageHover);
+
         // Load normal image with timeout detection
         const normalImg = new Image();
         const normalTimeout = setTimeout(() => {
             if (!locationData.normalImage) {
-                console.warn(`Timeout loading ${location.name} normal image after 10 seconds`);
+                console.warn(`⚠ Timeout loading ${location.name} normal image after 10 seconds`);
             }
         }, 10000);
 
@@ -349,18 +353,20 @@ class Game {
         };
         normalImg.onerror = (e) => {
             clearTimeout(normalTimeout);
-            console.error(`✗ Failed to load ${location.name} normal image:`, e);
-            console.error(`   Path: ${basePath}${location.image}${cacheBuster}`);
+            console.error(`✗ Failed to load ${location.name} normal image`);
+            console.error(`   Attempted path: ${normalPath}${cacheBuster}`);
+            console.error(`   Error:`, e);
+            // Retry without encoding in case that's the issue
             this.retryImageLoad(normalImg, `${basePath}${location.image}`, `${location.name} (normal)`);
         };
-        console.log(`  → Loading normal: ${basePath}${location.image}${cacheBuster}`);
-        normalImg.src = `${basePath}${location.image}${cacheBuster}`;
+        console.log(`  → Loading normal: ${normalPath}${cacheBuster}`);
+        normalImg.src = `${normalPath}${cacheBuster}`;
 
         // Load hover image (with title) with timeout detection
         const hoverImg = new Image();
         const hoverTimeout = setTimeout(() => {
             if (!locationData.hoverImage) {
-                console.warn(`Timeout loading ${location.name} hover image after 10 seconds`);
+                console.warn(`⚠ Timeout loading ${location.name} hover image after 10 seconds`);
             }
         }, 10000);
 
@@ -373,12 +379,14 @@ class Game {
         };
         hoverImg.onerror = (e) => {
             clearTimeout(hoverTimeout);
-            console.error(`✗ Failed to load ${location.name} hover image:`, e);
-            console.error(`   Path: ${basePath}${location.imageHover}${cacheBuster}`);
+            console.error(`✗ Failed to load ${location.name} hover image`);
+            console.error(`   Attempted path: ${hoverPath}${cacheBuster}`);
+            console.error(`   Error:`, e);
+            // Retry without encoding in case that's the issue
             this.retryImageLoad(hoverImg, `${basePath}${location.imageHover}`, `${location.name} (hover)`);
         };
-        console.log(`  → Loading hover: ${basePath}${location.imageHover}${cacheBuster}`);
-        hoverImg.src = `${basePath}${location.imageHover}${cacheBuster}`;
+        console.log(`  → Loading hover: ${hoverPath}${cacheBuster}`);
+        hoverImg.src = `${hoverPath}${cacheBuster}`;
 
         this.locations.push(locationData);
     }
