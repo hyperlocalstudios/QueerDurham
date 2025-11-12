@@ -299,51 +299,66 @@ class Game {
             ? '/QueerDurham/'
             : './';
 
-        // Load all location images
-        LOCATIONS.forEach(location => {
-            const locationData = {
-                ...location,
-                normalImage: null,
-                hoverImage: null,
-                loaded: false,
-                hoverTransition: 0 // 0 = normal, 1 = fully hovered (for smooth animation)
-            };
+        // Calculate total images to load
+        this.totalImagesToLoad += LOCATIONS.length * 2; // Normal + hover for each
 
-            this.totalImagesToLoad += 2; // Normal + hover image
+        // Load locations in batches to prevent browser timeout
+        const BATCH_SIZE = 4; // Load 4 locations at a time
+        const BATCH_DELAY = 100; // 100ms delay between batches
 
-            // Load normal image
-            const normalImg = new Image();
-            normalImg.onload = () => {
-                locationData.normalImage = normalImg;
-                locationData.width = normalImg.width * GAME_CONFIG.imageScale;
-                locationData.height = normalImg.height * GAME_CONFIG.imageScale;
-                this.imagesLoaded++;
-                console.log(`Loaded ${location.name} normal (${this.imagesLoaded}/${this.totalImagesToLoad})`);
+        for (let i = 0; i < LOCATIONS.length; i += BATCH_SIZE) {
+            const batch = LOCATIONS.slice(i, i + BATCH_SIZE);
+            const delay = (i / BATCH_SIZE) * BATCH_DELAY;
 
-                this.checkLocationLoaded(locationData);
-            };
-            normalImg.onerror = () => {
-                console.error(`Failed to load location image: ${basePath}${location.image}`);
-                this.retryImageLoad(normalImg, `${basePath}${location.image}`, `${location.name} (normal)`);
-            };
-            normalImg.src = `${basePath}${location.image}`;
+            setTimeout(() => {
+                batch.forEach(location => {
+                    this.loadSingleLocation(location, basePath);
+                });
+            }, delay);
+        }
+    }
 
-            // Load hover image (with title)
-            const hoverImg = new Image();
-            hoverImg.onload = () => {
-                locationData.hoverImage = hoverImg;
-                this.imagesLoaded++;
-                console.log(`Loaded ${location.name} hover (${this.imagesLoaded}/${this.totalImagesToLoad})`);
-                this.checkLocationLoaded(locationData);
-            };
-            hoverImg.onerror = () => {
-                console.error(`Failed to load hover image: ${basePath}${location.imageHover}`);
-                this.retryImageLoad(hoverImg, `${basePath}${location.imageHover}`, `${location.name} (hover)`);
-            };
-            hoverImg.src = `${basePath}${location.imageHover}`;
+    loadSingleLocation(location, basePath) {
+        const locationData = {
+            ...location,
+            normalImage: null,
+            hoverImage: null,
+            loaded: false,
+            hoverTransition: 0 // 0 = normal, 1 = fully hovered (for smooth animation)
+        };
 
-            this.locations.push(locationData);
-        });
+        // Load normal image
+        const normalImg = new Image();
+        normalImg.onload = () => {
+            locationData.normalImage = normalImg;
+            locationData.width = normalImg.width * GAME_CONFIG.imageScale;
+            locationData.height = normalImg.height * GAME_CONFIG.imageScale;
+            this.imagesLoaded++;
+            console.log(`Loaded ${location.name} normal (${this.imagesLoaded}/${this.totalImagesToLoad})`);
+
+            this.checkLocationLoaded(locationData);
+        };
+        normalImg.onerror = () => {
+            console.error(`Failed to load location image: ${basePath}${location.image}`);
+            this.retryImageLoad(normalImg, `${basePath}${location.image}`, `${location.name} (normal)`);
+        };
+        normalImg.src = `${basePath}${location.image}`;
+
+        // Load hover image (with title)
+        const hoverImg = new Image();
+        hoverImg.onload = () => {
+            locationData.hoverImage = hoverImg;
+            this.imagesLoaded++;
+            console.log(`Loaded ${location.name} hover (${this.imagesLoaded}/${this.totalImagesToLoad})`);
+            this.checkLocationLoaded(locationData);
+        };
+        hoverImg.onerror = () => {
+            console.error(`Failed to load hover image: ${basePath}${location.imageHover}`);
+            this.retryImageLoad(hoverImg, `${basePath}${location.imageHover}`, `${location.name} (hover)`);
+        };
+        hoverImg.src = `${basePath}${location.imageHover}`;
+
+        this.locations.push(locationData);
     }
 
     loadObjects() {
