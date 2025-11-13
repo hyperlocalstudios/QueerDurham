@@ -329,7 +329,7 @@ const OBJECTS = [
 const GAME_CONFIG = {
     canvasWidth: 1024,
     canvasHeight: 768,
-    playerSpeed: 3,
+    playerSpeed: 4,
     interactionRadius: 80, // Distance player needs to be to interact with location
     hoverRadius: 80, // Distance to trigger hover state (title image)
     pinOffset: 15, // Vertical offset for location pin (positive = lower, overlapping image)
